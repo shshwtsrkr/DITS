@@ -7,7 +7,7 @@ from basicsr.utils.download_util import load_file_from_url
 from realesrgan import RealESRGANer
 from realesrgan.archs.srvgg_arch import SRVGGNetCompact
 
-def run_realesrgan(input_dir, output_dir, output_filename, enhancement_factor=1.5):
+def run_realesrgan(input_dir, output_dir, output_filename, enhancement_factor=1.5, training=False):
     """Inference demo for Real-ESRGAN.
     """
     class Namespace:
@@ -24,7 +24,7 @@ def run_realesrgan(input_dir, output_dir, output_filename, enhancement_factor=1.
         # outscale=1.5,
         model_path=None,
         suffix='out',
-        tile=400,
+        tile=100,
         tile_pad=10,
         pre_pad=0,
         face_enhance=False,
@@ -128,16 +128,10 @@ def run_realesrgan(input_dir, output_dir, output_filename, enhancement_factor=1.
                 extension = extension[1:]
             else:
                 extension = args.ext
-            if img_mode == 'RGBA':  # RGBA images should be saved in png format
+            if img_mode == 'RGBA':
                 extension = 'png'
-            output = cv2.resize(output, (original_width, original_height))
+            if training:
+                output = cv2.resize(output, (original_width, original_height))
             save_path = os.path.join(args.output, output_filename)
             cv2.imwrite(save_path, output)
-def run_realesrgan_with_paths():
-    input_path = "inputs"
-    output_path = "inputds"
-    run_realesrgan(input_path, output_path)
 
-
-if __name__ == '__main__':
-    run_realesrgan_with_paths()

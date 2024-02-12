@@ -30,7 +30,7 @@ from adet.config import get_cfg
 from adet.checkpoint import AdetCheckpointer
 from adet.evaluation import TextEvaluator
 import torch.multiprocessing as mp
-from inference import run_realesrgan
+from enhancement import run_realesrgan
 from PIL import Image
 
 
@@ -255,7 +255,6 @@ def setup(args):
 
     return cfg
 
-
 def main(args):
     cfg = setup(args)
 
@@ -280,13 +279,34 @@ def main(args):
 
 
 if __name__ == "__main__":
-    input_dir = "datasets/<dataset_name>/train_images/" #Dataset Name here
+    args = default_argument_parser().parse_args()
+    print("Command Line Args:", args)
+    cfg = setup(args)
+    train_dataset_names = cfg.DATASETS.TRAIN
+    test_dataset_names = cfg.DATASETS.TEST
+    print(f"Training datasets: {train_dataset_names}")
+    print(f"Testing datasets: {test_dataset_names}")
+
+    if 'ctw1500_train_96voc' in train_dataset_names or 'ctw1500_test' in test_dataset_names:
+        dataset_dir = "ctw1500"
+    elif 'drone_train' in train_dataset_names or 'drone_test' in test_dataset_names:
+        dataset_dir = "drone"
+    elif 'totaltext_train' in train_dataset_names or 'totaltext_test' in test_dataset_names:
+        dataset_dir = "TotalText"
+    elif 'ic15_train' in train_dataset_names or 'ic15_test' in test_dataset_names:
+        dataset_dir = "IC15"
+    elif 'underwater_train' in train_dataset_names or 'underwater_test' in test_dataset_names:
+        dataset_dir = "underwater"
+    else:
+        raise ValueError("Unknown dataset. Please check the dataset names in the config.")
+
+    input_dir = f"datasets/{dataset_dir}/train_images/"
 
     for i, filename in enumerate(os.listdir(input_dir)):
         input_file = os.path.join(input_dir, filename)
         base_filename, file_extension = os.path.splitext(filename)
 
-        run_realesrgan(input_file, input_dir, filename, 1.5)
+        run_realesrgan(input_file, input_dir, filename, 1.5, training=True)
         torch.cuda.empty_cache()
     
     mp.set_start_method('spawn', force=True)
