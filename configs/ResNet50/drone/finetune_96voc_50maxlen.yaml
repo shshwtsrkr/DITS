@@ -1,7 +1,7 @@
 _BASE_: "../Base_det.yaml"
 
 MODEL:
-  WEIGHTS: "output/R50/ctw1500/pretrain_150k-tt-mlt-ic13-15_maxlen50_96voc/model_final.pth"
+  WEIGHTS: "" #initialize weight
   TRANSFORMER:
     VOC_SIZE: 96
     NUM_POINTS: 50
@@ -15,8 +15,8 @@ MODEL:
         BOUNDARY_WEIGHT: 0.25
   
 DATASETS:
-  TRAIN: ("ctw1500_train_96voc",)
-  TEST: ("ctw1500_test",)
+  TRAIN: ("drone_train",)
+  TEST: ("drone_test",)
 
 INPUT:
   ROTATE: False
@@ -35,4 +35,4 @@ SOLVER:
 TEST:
   EVAL_PERIOD: 1000
 
-OUTPUT_DIR: "output/R50/ctw1500/finetune_maxlen50_96voc"
+OUTPUT_DIR: "output/R50/drone/finetune_maxlen50_96voc"

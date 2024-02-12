@@ -1,8 +1,7 @@
 _BASE_: "../Base_det.yaml"
 
 MODEL:
-  #WEIGHTS: "output/R50/ctw1500/pretrain_150k-tt-mlt-ic13-15_maxlen50_96voc/model_final.pth"
-  WEIGHTS: "Documents/Shashwat/weights/non-enhanced/underwater/model_final.pth"
+  WEIGHTS: "" #initialize weight
   TRANSFORMER: 
     INFERENCE_TH_TEST: 0.3 #
     VOC_SIZE: 96
@@ -17,8 +16,8 @@ MODEL:
         BOUNDARY_WEIGHT: 0.25
   
 DATASETS:
-  TRAIN: ("ctw1500_train_96voc",)
-  TEST: ("ctw1500_test",)
+  TRAIN: ("underwater_train",)
+  TEST: ("underwater_test",)
 
 INPUT:
   ROTATE: False
@@ -34,10 +33,10 @@ SOLVER:
   LR_BACKBONE: 5e-6
   WARMUP_ITERS: 0
   STEPS: (8000,)
-  MAX_ITER: 30000
+  MAX_ITER: 12000
   CHECKPOINT_PERIOD: 4000
 
 TEST:
   EVAL_PERIOD: 400
 
-OUTPUT_DIR: "output/R50/ctw1500/finetune_maxlen50_96voc"
+OUTPUT_DIR: "output/R50/underwater/finetune_maxlen50_96voc"
